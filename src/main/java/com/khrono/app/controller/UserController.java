@@ -1,6 +1,7 @@
 package com.khrono.app.controller;
 
 import com.khrono.app.domain.User;
+import com.khrono.app.service.user.UserDto;
 import com.khrono.app.service.user.UserServiceImplementation;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,10 @@ public class UserController {
     private final UserServiceImplementation userService;
 
     @PostMapping({"/createUser"})
-    public ResponseEntity<User> addUser(@RequestBody User user)
+    public ResponseEntity<UserDto> addUser(@RequestBody UserDto user)
     {
         System.out.println("here");
-        User savedUser = userService.saveUser(user);
+        UserDto savedUser = userService.saveUser(user);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
