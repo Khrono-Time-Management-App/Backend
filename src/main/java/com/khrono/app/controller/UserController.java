@@ -25,7 +25,6 @@ public class UserController {
 
     private final UserServiceImplementation userService;
 
-    private final UserMapperImplementation userMapperImplementation;
 
     private final JwtTokenService jwtTokenService;
 
