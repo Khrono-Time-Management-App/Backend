@@ -18,6 +18,8 @@ import java.util.List;
 public class UserServiceImplementation implements IUserService{
 
 
+    private UserMapperImplementation userMapper;
+
     private final IUserRepository userRepository;
 
 
@@ -26,10 +28,12 @@ public class UserServiceImplementation implements IUserService{
     private final PasswordEncoder encoder;
 
     @Override
-    public User saveUser(User userEntity) {
-        userEntity.setPassword(encoder.encode(userEntity.getPassword()));
+    public UserDto saveUser(UserDto userDto) {
+        User userEntity = userMapper.toEntity(userDto);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         userEntity.setId(sequenceGenerator.getSequenceNumber(User.SEQUENCE_NAME));
-        return userRepository.save(userEntity);
+        return userMapper.toService(userRepository.save(userEntity));
     }
 
     @Override
