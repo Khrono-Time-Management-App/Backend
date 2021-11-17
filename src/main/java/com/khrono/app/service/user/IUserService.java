@@ -6,7 +6,7 @@ import com.khrono.app.dtos.UserPasswordDto;
 import java.util.List;
 
 public interface IUserService {
-    User saveUser(User user);
+    UserDto saveUser(UserDto user);
 
     List<User> getAllUsers();
 

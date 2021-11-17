@@ -26,7 +26,6 @@ public class UserController {
 
     private final UserServiceImplementation userService;
 
-    private final UserMapperImplementation userMapperImplementation;
 
     private final JwtTokenService jwtTokenService;
 
@@ -34,8 +33,8 @@ public class UserController {
     public ResponseEntity<UserDto> addUser(@RequestBody UserDto user)
     {
         System.out.println("here");
-        User savedUser = userService.saveUser(userMapperImplementation.toEntity(user));
-        return new ResponseEntity<>(userMapperImplementation.toService(savedUser), HttpStatus.CREATED);
+        UserDto savedUser = userService.saveUser(user);
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
     @GetMapping({"/getUsers"})
