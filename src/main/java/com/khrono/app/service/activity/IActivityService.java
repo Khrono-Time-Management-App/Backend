@@ -2,9 +2,9 @@ package com.khrono.app.service.activity;
 
 public interface IActivityService {
 
-    ActivityDto saveActivity(ActivityDto activity);
-    ActivityListDto getActivitiesFromUser();
-    ActivityDto getActivityById(int id);
-    ActivityDto updateActivity(ActivityDto activity);
-    ActivityDto deleteActivity(ActivityDto activity);
+    ActivityDto saveActivity(int userId, ActivityDto activity);
+    ActivityListDto getActivitiesFromUser(int userId);
+    ActivityDto getActivityById(int userId, int activityId);
+    ActivityDto updateActivity(int userId, ActivityDto activity);
+    ActivityDto deleteActivity(int userId, ActivityDto activity);
 }

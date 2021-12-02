@@ -18,7 +18,6 @@ public class UserMapperImplementation implements IUserMapper {
                 .lastName(entity.getLastName())
                 .email(entity.getEmail())
                 .password(entity.getPassword())
-                .birthDate(entity.getBirthDate())
                 .build();
     }
 
@@ -30,7 +29,6 @@ public class UserMapperImplementation implements IUserMapper {
                 .lastName(dto.getLastName())
                 .email(dto.getEmail())
                 .password(dto.getPassword())
-                .birthDate(dto.getBirthDate())
                 .build();
     }
 

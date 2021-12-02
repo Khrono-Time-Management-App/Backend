@@ -10,5 +10,5 @@ public interface IUserService {
 
     List<User> getAllUsers();
 
-    UserPasswordDto findUser(UserPasswordDto user);
+    UserDto findUser(UserPasswordDto user);
 }

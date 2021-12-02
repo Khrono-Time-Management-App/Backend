@@ -1,5 +1,6 @@
 package com.khrono.app.service.activity;
 
+import com.khrono.app.config.JwtTokenService;
 import com.khrono.app.domain.Activity;
 import com.khrono.app.repository.IActivityRepository;
 import com.khrono.app.service.mapper.IActivityMapper;
@@ -23,55 +24,69 @@ public class ActivityServiceImplementation implements IActivityService {
 
 
     @Override
-    public ActivityDto saveActivity(ActivityDto activityDto) {
+    public ActivityDto saveActivity(int userId, ActivityDto activityDto) {
         Activity activity = activityMapper.toEntity(activityDto);
         activity.setId(sequenceGenerator.getSequenceNumber(Activity.SEQUENCE_NAME));
 
-        return activityMapper.toService(
+        ActivityDto activityDto1 = activityMapper.toService(
                 activityRepository.save(
                         activity
                 )
         );
+        activityDto1.setUserId(userId);
+        return activityDto1;
     }
 
     @Override
-    public ActivityListDto getActivitiesFromUser() {
+    public ActivityListDto getActivitiesFromUser(int userId) {
+
         return new ActivityListDto(
                 activityMapper.toServiceList(
-                        activityRepository.findAll()
+                        activityRepository.findAllByUserId(userId)
                 )
         );
     }
 
     @Override
-    public ActivityDto getActivityById(int id) {
-        return activityMapper.toService(
+    public ActivityDto getActivityById(int userId, int activityId) {
+        ActivityDto activityDto = activityMapper.toService(
                 activityRepository
-                        .findById(id)
-                        .orElse(null)
+                        .findByIdAndUserId(userId, activityId)
         );
+        activityDto.setUserId(userId);
+        return activityDto;
     }
 
     @Override
-    public ActivityDto updateActivity(ActivityDto activityDto) {
+    public ActivityDto updateActivity(int userId, ActivityDto activityDto) {
         Activity existingActivity = activityRepository.findById(activityDto.getId()).orElse(null);
 
         if (existingActivity == null)
             return null;
 
-        return activityMapper.toService(
+        ActivityDto activityDto1 = activityMapper.toService(
                 activityRepository.save(
                         activityMapper.toEntity(activityDto)
                 )
         );
+        activityDto1.setUserId(userId);
+        return activityDto1;
     }
 
     @Override
-    public ActivityDto deleteActivity(ActivityDto activityDto) {
+    public ActivityDto deleteActivity(int userId, ActivityDto activityDto) {
+        Activity activity = activityMapper.toEntity(
+                activityDto
+        );
+        if (activity.getUserId() != userId)
+            throw new RuntimeException("ai belit pula");
+        if (!activityRepository.findById(
+                activity.getId()
+        ).isPresent())
+            return null;
+
         activityRepository.delete(
-                activityMapper.toEntity(
-                        activityDto
-                )
+                activity
         );
 
         return activityDto;
