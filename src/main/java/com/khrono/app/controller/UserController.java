@@ -25,8 +25,6 @@ public class UserController {
 
 
     private final UserServiceImplementation userService;
-
-
     private final JwtTokenService jwtTokenService;
 
     @PostMapping({"/createUser"})
