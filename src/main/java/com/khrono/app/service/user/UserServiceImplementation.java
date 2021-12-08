@@ -6,20 +6,17 @@ import com.khrono.app.repository.IUserRepository;
 import com.khrono.app.service.mapper.UserMapperImplementation;
 import com.khrono.app.service.sequence.SequenceGenerator;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import java.util.Base64;
 import java.util.List;
 
 @AllArgsConstructor
 @Service
 public class UserServiceImplementation implements IUserService{
 
-
     private UserMapperImplementation userMapper;
-
     private final IUserRepository userRepository;
 
 

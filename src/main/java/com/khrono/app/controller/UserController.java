@@ -18,12 +18,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @AllArgsConstructor
+@CrossOrigin
 public class UserController {
 
 
     private final UserServiceImplementation userService;
-
-
     private final JwtTokenService jwtTokenService;
 
     @PostMapping({"/createUser"})
