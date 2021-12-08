@@ -8,8 +8,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,5 +24,4 @@ public class User {
     private String lastName;
     private String email;
     private String password;
-    private Date birthDate;
 }

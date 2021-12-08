@@ -14,9 +14,11 @@ public class ActivityMapperImplementation implements IActivityMapper{
     public ActivityDto toService(Activity entity) {
         return ActivityDto.builder()
                 .id(entity.getId())
+                .name(entity.getName())
                 .startDateTime(entity.getStartDateTime())
                 .endDateTime(entity.getEndDateTime())
                 .category(entity.getCategory())
+                .userId(entity.getUserId())
                 .build();
     }
 
@@ -24,9 +26,11 @@ public class ActivityMapperImplementation implements IActivityMapper{
     public Activity toEntity(ActivityDto dto) {
         return Activity.builder()
                 .id(dto.getId())
+                .name(dto.getName())
                 .startDateTime(dto.getStartDateTime())
                 .endDateTime(dto.getEndDateTime())
                 .category(dto.getCategory())
+                .userId(dto.getUserId())
                 .build();
     }
 

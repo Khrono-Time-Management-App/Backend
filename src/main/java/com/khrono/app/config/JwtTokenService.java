@@ -1,10 +1,13 @@
 package com.khrono.app.config;
 
 
+import com.khrono.app.domain.User;
+import com.khrono.app.service.user.UserDto;
 import com.khrono.app.utils.enums.AppRoles;
 import com.khrono.app.utils.exceptions.JwtAuthenticationException;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,12 +17,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -27,7 +28,7 @@ public class JwtTokenService {
 
     private static final long EXPIRATIONTIME = Duration.ofDays(3).toMillis();
     private static final String HEADER_STRING = "app-auth";
-    private static final String CLAIM_USER = "email";
+    private static final String CLAIM_USER = "user";
     private static final String CLAIM_ROLES = "roles";
     @Value("${application.secret}")
     private String secret;
@@ -89,16 +90,28 @@ public class JwtTokenService {
         return auth;
     }
 
-    public String createJwtToken(final String userId, final Set<AppRoles> roles) {
+    public String createJwtToken(final UserDto user, final Set<AppRoles> roles) {
         // create the jwt token
         String jwtToken;
 
+        user.setPassword(null);
+
         jwtToken = Jwts.builder()//
-                .claim(CLAIM_USER, userId)//
+                .claim(CLAIM_USER, user)//
                 .claim(CLAIM_ROLES, new ArrayList<>(roles))//
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))//
                 .signWith(SignatureAlgorithm.HS512, secret.getBytes(StandardCharsets.UTF_8))//
                 .compact();//
         return jwtToken;
+    }
+
+    public User getUserFromToken(String token) {
+        try {
+            var decoded = DecodedJWT.getDecoded(token);
+            return decoded.user;
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("oof");
+            return null;
+        }
     }
 }

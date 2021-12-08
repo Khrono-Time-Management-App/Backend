@@ -1,7 +1,5 @@
 package com.khrono.app.service.activity;
 
-
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

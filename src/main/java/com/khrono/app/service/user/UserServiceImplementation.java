@@ -39,7 +39,7 @@ public class UserServiceImplementation implements IUserService{
     }
 
     @Override
-    public UserPasswordDto findUser(UserPasswordDto user) {
+    public UserDto findUser(UserPasswordDto user) {
         User foundUser = userRepository.findByEmail(user.getEmail());
 
         if(foundUser == null)
@@ -47,7 +47,7 @@ public class UserServiceImplementation implements IUserService{
         else if (!encoder.matches(user.getPassword(), foundUser.getPassword())) {
             user.setPassword(null);
         }
-        return user;
+        return userMapper.toService(foundUser);
 
     }
 

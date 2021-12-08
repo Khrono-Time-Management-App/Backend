@@ -3,13 +3,11 @@ package com.khrono.app.controller;
 import com.khrono.app.config.JwtTokenService;
 import com.khrono.app.domain.User;
 import com.khrono.app.dtos.UserPasswordDto;
-import com.khrono.app.service.mapper.UserMapperImplementation;
 import com.khrono.app.service.user.UserDto;
 import com.khrono.app.service.user.UserServiceImplementation;
 import com.khrono.app.utils.enums.AppRoles;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +43,7 @@ public class UserController {
     @SneakyThrows
     public ResponseEntity<String> login(@RequestBody UserPasswordDto userPasswordDto) {
 
-        UserPasswordDto user = userService.findUser(userPasswordDto);
+        UserDto user = userService.findUser(userPasswordDto);
         String jwt;
 
         if (user == null)
@@ -54,7 +52,7 @@ public class UserController {
             if (user.getPassword() == null)
                 return ResponseEntity.internalServerError().body("Incorrect password!");
             else
-                jwt = jwtTokenService.createJwtToken(user.getEmail(), Collections.singleton(AppRoles.valueOf("USER")));
+                jwt = jwtTokenService.createJwtToken(user, Collections.singleton(AppRoles.valueOf("USER")));
             return ResponseEntity.ok(jwt);
         }
     }

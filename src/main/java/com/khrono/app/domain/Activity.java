@@ -27,4 +27,5 @@ public class Activity {
     private Date endDateTime;
     private String category;
 
+    private int userId;
 }
