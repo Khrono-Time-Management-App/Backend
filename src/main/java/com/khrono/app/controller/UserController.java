@@ -3,11 +3,13 @@ package com.khrono.app.controller;
 import com.khrono.app.config.JwtTokenService;
 import com.khrono.app.domain.User;
 import com.khrono.app.dtos.UserPasswordDto;
+import com.khrono.app.service.mapper.UserMapperImplementation;
 import com.khrono.app.service.user.UserDto;
 import com.khrono.app.service.user.UserServiceImplementation;
 import com.khrono.app.utils.enums.AppRoles;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.var;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,25 +23,23 @@ import java.util.List;
 @CrossOrigin
 public class UserController {
 
-
+    private UserMapperImplementation userMapper;
     private final UserServiceImplementation userService;
     private final JwtTokenService jwtTokenService;
 
     @PostMapping({"/createUser"})
-    public ResponseEntity<UserDto> addUser(@RequestBody UserDto user)
-    {
+    public ResponseEntity<UserDto> addUser(@RequestBody UserDto user) {
         System.out.println("here");
         UserDto savedUser = userService.saveUser(user);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
     @GetMapping({"/getUsers"})
-    public ResponseEntity<List<User>> getUsers()
-    {
-        return new ResponseEntity<>(userService.getAllUsers(),HttpStatus.OK);
+    public ResponseEntity<List<User>> getUsers() {
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
-    @PostMapping(value="/login", produces="text/plain")
+    @PostMapping(value = "/login", produces = "text/plain")
     @SneakyThrows
     public ResponseEntity<String> login(@RequestBody UserPasswordDto userPasswordDto) {
 
@@ -55,6 +55,13 @@ public class UserController {
                 jwt = jwtTokenService.createJwtToken(user, Collections.singleton(AppRoles.valueOf("USER")));
             return ResponseEntity.ok(jwt);
         }
+    }
+
+    @GetMapping({"/getUser"})
+    public ResponseEntity<UserDto> getUser(@RequestHeader("Authorization") String token) {
+        var user = jwtTokenService.getUserFromToken(token);
+        var userDto = userMapper.toService(user);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
 }
