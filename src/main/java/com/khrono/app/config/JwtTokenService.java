@@ -7,7 +7,6 @@ import com.khrono.app.utils.enums.AppRoles;
 import com.khrono.app.utils.exceptions.JwtAuthenticationException;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -107,7 +106,7 @@ public class JwtTokenService {
 
     public User getUserFromToken(String token) {
         try {
-            var decoded = DecodedJWT.getDecoded(token);
+            DecodedJWT decoded = DecodedJWT.getDecoded(token);
             return decoded.user;
         } catch (UnsupportedEncodingException e) {
             System.out.println("oof");

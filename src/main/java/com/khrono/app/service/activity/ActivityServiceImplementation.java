@@ -1,6 +1,5 @@
 package com.khrono.app.service.activity;
 
-import com.khrono.app.config.JwtTokenService;
 import com.khrono.app.domain.Activity;
 import com.khrono.app.repository.IActivityRepository;
 import com.khrono.app.service.mapper.IActivityMapper;
@@ -27,24 +26,31 @@ public class ActivityServiceImplementation implements IActivityService {
     public ActivityDto saveActivity(int userId, ActivityDto activityDto) {
         Activity activity = activityMapper.toEntity(activityDto);
         activity.setId(sequenceGenerator.getSequenceNumber(Activity.SEQUENCE_NAME));
+        activity.setUserId(userId);
 
-        ActivityDto activityDto1 = activityMapper.toService(
+        return activityMapper.toService(
                 activityRepository.save(
                         activity
                 )
         );
-        activityDto1.setUserId(userId);
-        return activityDto1;
     }
 
     @Override
     public ActivityListDto getActivitiesFromUser(int userId) {
 
-        return new ActivityListDto(
+        System.out.print("user id --->");
+        System.out.println(userId);
+
+        ActivityListDto activities = new ActivityListDto(
                 activityMapper.toServiceList(
                         activityRepository.findAllByUserId(userId)
                 )
         );
+
+        System.out.print("activity list fro --->");
+        System.out.println(activities);
+
+        return activities;
     }
 
     @Override

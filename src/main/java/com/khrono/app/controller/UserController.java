@@ -9,7 +9,6 @@ import com.khrono.app.service.user.UserServiceImplementation;
 import com.khrono.app.utils.enums.AppRoles;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.var;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,8 +58,8 @@ public class UserController {
 
     @GetMapping({"/getUser"})
     public ResponseEntity<UserDto> getUser(@RequestHeader("Authorization") String token) {
-        var user = jwtTokenService.getUserFromToken(token);
-        var userDto = userMapper.toService(user);
+        User user = jwtTokenService.getUserFromToken(token);
+        UserDto userDto = userMapper.toService(user);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 

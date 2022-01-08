@@ -2,6 +2,7 @@ package com.khrono.app.repository;
 
 import com.khrono.app.domain.Activity;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 

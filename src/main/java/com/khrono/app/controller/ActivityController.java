@@ -1,15 +1,14 @@
 package com.khrono.app.controller;
 
 import com.khrono.app.config.JwtTokenService;
+import com.khrono.app.domain.User;
 import com.khrono.app.service.activity.ActivityDto;
 import com.khrono.app.service.activity.ActivityListDto;
 import com.khrono.app.service.activity.ActivityServiceImplementation;
 import lombok.AllArgsConstructor;
-import lombok.var;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +26,7 @@ public class ActivityController {
     @GetMapping({"/getActivities"})
     public ResponseEntity<ActivityListDto> getActivities(@RequestHeader("Authorization") String token)
     {
-        var user = jwtTokenService.getUserFromToken(token);
+        User user = jwtTokenService.getUserFromToken(token);
         return new ResponseEntity<>(activityService.getActivitiesFromUser(user.getId()), HttpStatus.OK);
     }
 
@@ -36,7 +35,7 @@ public class ActivityController {
             @RequestHeader("Authorization") String token,
             @PathVariable int activityId
     ) {
-        var user = jwtTokenService.getUserFromToken(token);
+        User user = jwtTokenService.getUserFromToken(token);
         return new ResponseEntity<>(activityService.getActivityById(user.getId(), activityId), HttpStatus.OK);
     }
 
@@ -45,8 +44,12 @@ public class ActivityController {
             @RequestHeader("Authorization") String token,
             @RequestBody ActivityDto activity
     ) {
-        var user = jwtTokenService.getUserFromToken(token);
+        User user = jwtTokenService.getUserFromToken(token);
         ActivityDto activityDto = activityService.saveActivity(user.getId(), activity);
+
+        System.out.print("Added activity ---> ");
+        System.out.println(activityDto);
+
         return new ResponseEntity<>(activityDto, HttpStatus.CREATED);
     }
 
@@ -55,7 +58,7 @@ public class ActivityController {
             @RequestHeader("Authorization") String token,
             @RequestBody ActivityDto activity
     ) {
-        var user = jwtTokenService.getUserFromToken(token);
+        User user = jwtTokenService.getUserFromToken(token);
         ActivityDto activityDto = activityService.updateActivity(user.getId(), activity);
 
         if (activityDto == null)
@@ -70,7 +73,7 @@ public class ActivityController {
             @RequestBody ActivityDto activity
     ) {
 
-        var user = jwtTokenService.getUserFromToken(token);
+        User user = jwtTokenService.getUserFromToken(token);
         try {
             ActivityDto activityDto = activityService.deleteActivity(user.getId(), activity);
 
