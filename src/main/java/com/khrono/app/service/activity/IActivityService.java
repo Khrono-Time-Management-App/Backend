@@ -1,7 +1,5 @@
 package com.khrono.app.service.activity;
 
-import java.util.List;
-
 public interface IActivityService {
 
     ActivityDto saveActivity(int userId, ActivityDto activity);
@@ -10,4 +8,5 @@ public interface IActivityService {
     ActivityDto updateActivity(int userId, ActivityDto activity);
     ActivityDto deleteActivity(int userId, ActivityDto activity);
     ActivityReportDto getActivitiesInLast2Months(int userId);
+    float getUserActivitiesPercentageToMean(int userId);
 }

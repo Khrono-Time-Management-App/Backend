@@ -2,6 +2,7 @@ package com.khrono.app.service.activity;
 
 import com.khrono.app.domain.Activity;
 import com.khrono.app.repository.IActivityRepository;
+import com.khrono.app.repository.IUserRepository;
 import com.khrono.app.service.mapper.IActivityMapper;
 import com.khrono.app.service.sequence.SequenceGenerator;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,9 @@ public class ActivityServiceImplementation implements IActivityService {
 
     @Autowired
     private final IActivityRepository activityRepository;
+
+    @Autowired
+    private final IUserRepository userRepository;
 
     @Autowired
     private final IActivityMapper activityMapper;
@@ -130,5 +134,28 @@ public class ActivityServiceImplementation implements IActivityService {
 
         return new ActivityReportDto(activityMapper.toServiceList(currentMonthActivities),activityMapper.toServiceList(previousMonthActivities));
 
+    }
+
+    @Override
+    public float getUserActivitiesPercentageToMean(int userId) {
+        return getUserActivitiesTotalMillis(userId) / getAllUsersMeanActivitiesMillis() - 1;
+    }
+
+    private float getUserActivitiesTotalMillis(int userId) {
+        return activityRepository.findAllByUserId(userId)
+                .stream()
+                .map(Activity::getActivityDatesDiffInMillis)
+                .reduce(0L, Long::sum);
+    }
+
+    private float getAllUsersActivitiesTotalMillis() {
+        return activityRepository.findAll()
+                .stream()
+                .map(Activity::getActivityDatesDiffInMillis)
+                .reduce(0L, Long::sum);
+    }
+
+    private float getAllUsersMeanActivitiesMillis() {
+        return getAllUsersActivitiesTotalMillis() / userRepository.count();
     }
 }

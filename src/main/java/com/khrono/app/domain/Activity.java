@@ -28,4 +28,10 @@ public class Activity {
     private String category;
 
     private int userId;
+
+    public long getActivityDatesDiffInMillis() {
+        if (getStartDateTime() == null || getEndDateTime() == null)
+            return 0;
+        return getEndDateTime().getTime() - getStartDateTime().getTime();
+    }
 }

@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/activity")
 @AllArgsConstructor
@@ -94,5 +92,12 @@ public class ActivityController {
         } catch (RuntimeException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping({"/getPercentageToMean"})
+    public ResponseEntity<Float> getPercentageToMean(@RequestHeader("Authorization") String token)
+    {
+        User user = jwtTokenService.getUserFromToken(token);
+        return new ResponseEntity<>(activityService.getUserActivitiesPercentageToMean(user.getId()), HttpStatus.OK);
     }
 }
