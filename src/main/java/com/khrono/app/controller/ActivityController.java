@@ -4,6 +4,7 @@ import com.khrono.app.config.JwtTokenService;
 import com.khrono.app.domain.User;
 import com.khrono.app.service.activity.ActivityDto;
 import com.khrono.app.service.activity.ActivityListDto;
+import com.khrono.app.service.activity.ActivityReportDto;
 import com.khrono.app.service.activity.ActivityServiceImplementation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/activity")
@@ -28,6 +31,13 @@ public class ActivityController {
     {
         User user = jwtTokenService.getUserFromToken(token);
         return new ResponseEntity<>(activityService.getActivitiesFromUser(user.getId()), HttpStatus.OK);
+    }
+
+    @GetMapping({"/getActivities/last2Months"})
+    public ResponseEntity<ActivityReportDto> getActivitiesFromLast2Months(@RequestHeader("Authorization") String token)
+    {
+        User user = jwtTokenService.getUserFromToken(token);
+        return new ResponseEntity<>(activityService.getActivitiesInLast2Months(user.getId()), HttpStatus.OK);
     }
 
     @GetMapping({"/getActivity/{activityId}"})
