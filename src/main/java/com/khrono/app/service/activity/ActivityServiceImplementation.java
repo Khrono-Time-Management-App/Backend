@@ -5,8 +5,14 @@ import com.khrono.app.repository.IActivityRepository;
 import com.khrono.app.service.mapper.IActivityMapper;
 import com.khrono.app.service.sequence.SequenceGenerator;
 import lombok.AllArgsConstructor;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -96,5 +102,33 @@ public class ActivityServiceImplementation implements IActivityService {
         );
 
         return activityDto;
+    }
+
+    @Override
+    public ActivityReportDto getActivitiesInLast2Months(int userId) {
+
+        System.out.print("user id --->");
+        System.out.println(userId);
+
+        var activities =  activityRepository.findAllByUserId(userId);
+
+        LocalDate date = LocalDate.now().minusMonths(1);
+
+        LocalDate previousDate = LocalDate.now().minusMonths(2);
+
+        var currentMonthActivities = activities.stream().filter(s ->
+            s.getEndDateTime().after(java.sql.Date.valueOf(date))
+        ).collect(Collectors.toList());
+
+        var previousMonthActivities = activities.stream().filter(s ->
+                s.getEndDateTime().after(java.sql.Date.valueOf(previousDate)) && s.getEndDateTime().before(java.sql.Date.valueOf(date)))
+                .collect(Collectors.toList());
+
+
+        System.out.print("activity list fro --->");
+        System.out.println(activities);
+
+        return new ActivityReportDto(activityMapper.toServiceList(currentMonthActivities),activityMapper.toServiceList(previousMonthActivities));
+
     }
 }
